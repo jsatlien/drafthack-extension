@@ -28,15 +28,9 @@ window.addEventListener('load', (event) => {
             port.postMessage({
                 type: 'ADD_DRAFT',
                 draftId
-            })
-            // API.createDraft(draftId)
-            // .then(data => console.log(data))
-            // .catch(err => console.log(err));
+            });
         }
 
-        //let cells = document.getElementsByClassName('cell');
-        // addCellChangeEvents($());
-        // const c
         const cells = $('.cell');
         console.log(cells);
         if (cells.length) {
@@ -46,7 +40,7 @@ window.addEventListener('load', (event) => {
                     let playerId = getPlayerId($(this));
                     if (playerId && !currentDraft.picked.includes(playerId)) {
                         currentDraft.picked.push(playerId);
-                        saveDraft(currentDraft);
+                        saveDraft(port, currentDraft, playerId);
                     }
                 } else {
                     $(this).on('DOMSubtreeModified', function (e) {
@@ -61,8 +55,9 @@ window.addEventListener('load', (event) => {
                         }
                     })
                 }
-            });
-         
+            });    
+        } else {
+            //emit message to backend and tell client to reload draft page
         }
         console.log(cells);
 

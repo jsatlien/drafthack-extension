@@ -1,6 +1,6 @@
 //API class
 class API {
- static serverAddress = "http://localhost:3001"
+ static serverAddress = "http://localhost:3001";
 
   static async getServerAddress() {
     const url = chrome.runtime.getURL('./config/config.json');
@@ -42,8 +42,8 @@ class API {
       });
       return response.json();
     } else {
-      console.error('POST createDraft: no draft id')
-      return Promise.rejest(new Error('POST createDraft: no draft id'))
+      console.error('POST createDraft: no draft id');
+      return Promise.reject(new Error('POST createDraft: no draft id'));
     }
   }
 }
