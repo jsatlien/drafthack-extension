@@ -3,6 +3,9 @@ window.addEventListener('load', (event) => {
     console.log('load event fired');
     const path = window.location.pathname;
     if (window.location.host === 'sleeper.app' && path.includes('/draft/')) {
+        var port = chrome.runtime.connect({name: "drafthack"});
+        port.postMessage('port connected to extension');
+        console.log(port);
         console.log(window.location);
         const draftId = path.split('/')[3];
 
@@ -22,9 +25,13 @@ window.addEventListener('load', (event) => {
             //go ahead and push/save current draft in local storage
             drafts.push(currentDraft);
             localStorage.setItem('drafts', JSON.stringify(drafts));
-            API.createDraft(draftId)
-            .then(data => console.log(data))
-            .catch(err => console.log(err));
+            port.postMessage({
+                type: 'ADD_DRAFT',
+                draftId
+            })
+            // API.createDraft(draftId)
+            // .then(data => console.log(data))
+            // .catch(err => console.log(err));
         }
 
         //let cells = document.getElementsByClassName('cell');
@@ -49,9 +56,7 @@ window.addEventListener('load', (event) => {
                         if (playerAriaLabel) {
                             let playerId = getPlayerId($(this));
                             if (playerId && !currentDraft.picked.includes(playerId)) {
-                                currentDraft.picked.push(playerId);
-                                console.log(currentDraft.picked);
-                                saveDraft(currentDraft);
+                                saveDraft(port, currentDraft, playerId);
                             }
                         }
                     })
@@ -72,7 +77,13 @@ function getPlayerId(cellJqueryObj) {
     }
 }
 
-function saveDraft(currentDraft) {
+function saveDraft(port, currentDraft, playerId) {
+    currentDraft.picked.push(playerId);
+    port.postMessage({
+        type: 'PICK_PLAYER',
+        draftId: currentDraft.id,
+        playerId
+    });
     const drafts = JSON.parse(localStorage.getItem('drafts'));
     let index = -1;
     drafts.forEach((draft, i) => {
