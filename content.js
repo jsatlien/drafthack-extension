@@ -22,7 +22,9 @@ window.addEventListener('load', (event) => {
             //go ahead and push/save current draft in local storage
             drafts.push(currentDraft);
             localStorage.setItem('drafts', JSON.stringify(drafts));
-
+            API.createDraft(draftId)
+            .then(data => console.log(data))
+            .catch(err => console.log(err));
         }
 
         //let cells = document.getElementsByClassName('cell');
@@ -32,7 +34,6 @@ window.addEventListener('load', (event) => {
         console.log(cells);
         if (cells.length) {
             cells.each(function () {
-                console.log($(this))
                 if ($(this).hasClass('drafted')) {
                     console.log('drafted!')
                     let playerId = getPlayerId($(this));

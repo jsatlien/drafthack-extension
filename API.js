@@ -1,5 +1,4 @@
-class API {
-    
+class API {   
     static serverAddress = localStorage.getItem('server_address') || 'http://localhost:3001'
 
     static addPlayer (draftId, playerId) {
@@ -18,14 +17,21 @@ class API {
         }
     }
     static createDraft (draftId) {
+        console.log('creating...')
         const url =  `${this.serverAddress}/api/draft`;
         if (draftId) {
             return $.ajax({
                 url,
-                type: 'POST'
-            })
+                type: 'POST',
+                data: {
+                    external_id: draftId,
+                    type: 'sleeper',
+                    picked: []
+                }
+            });
         } else {
             console.error('POST createDraft: no draft id')
+            return Promise.rejest(new Error('POST createDraft: no draft id'))
         }
     }
 }
