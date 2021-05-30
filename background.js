@@ -1,11 +1,4 @@
-// let server = localStorage.getItem('server_address') || 'http://localhost:3001';
-// localStorage.setItem('server_address', server);
-
-// chrome.storage.sync.set({key: value}, function() {
-//   console.log('Value is set to ' + value);
-// });
-
-
+//API class
 class API {
  static serverAddress = "http://localhost:3001"
 
@@ -21,13 +14,10 @@ class API {
     await this.getServerAddress();
     if (draftId && playerId) {
       const url = `${this.serverAddress}/api/draft/${draftId}/${playerId}`;
-      return fetch(url, {
+      const response = await fetch(url, {
         method: 'PUT'
       });
-      // .then(success => {
-      //     console.log('success!', success);
-      // })
-      // .catch(err => console.log(err));
+      return response.json();
     } else {
       console.error('PUT addPlayer failed: no draft id or player id');
     }
@@ -75,63 +65,5 @@ chrome.runtime.onConnect.addListener(function(port) {
         console.log(response);
         break;  
     }
-    // if (msg.joke == "Knock knock")
-    //   port.postMessage({question: "Who's there?"});
-    // else if (msg.answer == "Madame")
-    //   port.postMessage({question: "Madame who?"});
-    // else if (msg.answer == "Madame... Bovary")
-    //   port.postMessage({question: "I don't get it."});
   });
 });
-
-
-// let color = '#3aa757';
-// let foundSleeper = false;
-// let lobbyOpen = false;
-
-// chrome.tabs.onUpdated.addListener(
-//   function (tabId, changeInfo, tab) {
-//     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-//       // since only one tab should be active and in the current window at once
-//       // the return variable should only have one entry
-//       const activeTab = tabs[0];
-//       console.log(activeTab);
-//       if (!lobbyOpen) {
-
-//         if (activeTab && Object.keys(activeTab).length != 0) {
-//           const { url, id } = activeTab;
-//           if (url && url.includes('/sleeper.app/draft/')) {
-//             foundSleeper = true;
-//             if (activeTab.status === 'complete') {
-//               draftOpen(tabId);
-//             }         
-//           }
-//           else 
-//             foundSleeper = false;
-//         } else if (foundSleeper && !lobbyOpen) {
-//             draftOpen(tabId);
-//         }
-//       }
-//     });
-//   }
-// );
-
-// function draftOpen (draftTabId) {
-//   chrome.tabs.sendMessage(draftTabId, {
-//     message: 'draft_lobby_open'
-//   }, function (response) {
-//     if (response) {
-//       processDraftInitResponse(response);
-//     }
-//   });
-//   lobbyOpen = true;
-// }
-
-// function processDraftInitResponse (res) {
-//   if (!res.success) {
-//     switch (res.error) {
-//       case 'cells_not_found':
-//         console.log('reload required');
-//     }
-//   }
-// } 
