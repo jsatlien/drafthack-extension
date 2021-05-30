@@ -22,9 +22,8 @@
     "48": "/images/get_started48.png",
     "128": "/images/get_started128.png"
   },
-  "options_page": "options.html",
   "content_scripts":[{
     "matches":["http://*/*","https://*/*"],
-    "js":["jquery-3.6.0.min.js","content.js"]
+    "js":["jquery-3.6.0.min.js","API.js","content.js"]
   }]
 }

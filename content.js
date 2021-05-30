@@ -22,6 +22,7 @@ window.addEventListener('load', (event) => {
             //go ahead and push/save current draft in local storage
             drafts.push(currentDraft);
             localStorage.setItem('drafts', JSON.stringify(drafts));
+
         }
 
         //let cells = document.getElementsByClassName('cell');
