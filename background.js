@@ -13,7 +13,7 @@ class API {
   static async addPlayer(draftId, playerId) {
     await this.getServerAddress();
     if (draftId && playerId) {
-      const url = `${this.serverAddress}/api/draft/${draftId}/${playerId}`;
+      const url = `${this.serverAddress}/api/draft/pick/${draftId}/${playerId}`;
       const response = await fetch(url, {
         method: 'PUT'
       });
@@ -21,6 +21,22 @@ class API {
     } else {
       console.error('PUT addPlayer failed: no draft id or player id');
     }
+  }
+
+  static async activateDraft (draftId) {
+    await this.getServerAddress();
+
+    const url = `${this.serverAddress}/api/draft/activate/${draftId}`;
+    if (draftId) {
+      const response = await fetch(url, {
+        method: 'PUT'
+      });
+      return response.json();
+    } else {
+      console.error('PUT updateDraft: no draft id');
+      return Promise.reject(new Error('PUT updateDraft: no draft id'));
+    }
+
   }
 
   static async createDraft(draftId) {
@@ -64,6 +80,11 @@ chrome.runtime.onConnect.addListener(function(port) {
         response = await API.addPlayer(msg.draftId, msg.playerId);
         console.log(response);
         break;  
+      case 'DRAFT_LOBBY_OPEN':
+        response = await API.activateDraft(msg.draftId);
+        console.log(response);
+        break;
+
     }
   });
 });

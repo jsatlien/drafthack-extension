@@ -11,6 +11,12 @@ window.addEventListener('load', (event) => {
 
         console.log(draftId);
 
+        if (draftId)
+            port.postMessage({
+                type: 'DRAFT_LOBBY_OPEN',
+                draftId
+            })
+
         const drafts = JSON.parse(localStorage.getItem('drafts')) || [];
         let currentDraft;
         if (draftId && drafts.length) {
